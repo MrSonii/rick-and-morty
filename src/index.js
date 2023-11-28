@@ -1,10 +1,12 @@
 import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+
+//component imports for routing
 import Profile from './Profile';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -12,7 +14,7 @@ root.render(
     <Router>
       <Routes>
         <Route path="/" element={<App />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route path="/profile" element={<Profile />} />{/* using /profile route to display profile page of charahcters */}
       </Routes>
     </Router>
   </React.StrictMode>

@@ -1,5 +1,5 @@
 //url imports
-import { rickMortyBaseURL } from "../lib/config";
+import { rickMortyBaseURL } from "../lib/config";//baseURL for api
 
 export const getRickMortyCharacters = (string = "", page, filterby, filterVal) => {
   const data = {
@@ -8,9 +8,10 @@ export const getRickMortyCharacters = (string = "", page, filterby, filterVal) =
 
   let status = null;
 
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {//handelling PROMISE returned form api call.
+    
     //getting details using fetch method provided by JS, could have used other liberay like axios.
-    //URL is kept in lib/config.js, so that can be used by import the same in other files.
+    //URL is kept in lib/config.js, so that can be used by import the same in other files when needed.
     fetch(`${rickMortyBaseURL}/character?${string ? `name=${string}&` : ""}${page ? `page=${page}&` : ""}${filterby ? `${filterby}=${filterVal}&` : ""}`, data)
       .then((res) => {
         status = res.status;
@@ -32,9 +33,10 @@ export const getRickMortyCharacterEpisodes = (list) => {
 
   let status = null;
 
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {//handelling PROMISE returned form api call.
+
     //getting details using fetch method provided by JS, could have used other liberay like axios.
-    //URL is kept in lib/config.js, so that can be used by import the same in other files.
+    //URL is kept in lib/config.js, so that can be used by import the same in other files when needed.
     fetch(`${rickMortyBaseURL}/episode/${list}`, data)
       .then((res) => {
         status = res.status;
@@ -56,9 +58,10 @@ export const getRickMortyCharacterLocation = (int) => {
 
   let status = null;
 
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {//handelling PROMISE returned form api call.
+
     //getting details using fetch method provided by JS, could have used other liberay like axios.
-    //URL is kept in lib/config.js, so that can be used by import the same in other files.
+    //URL is kept in lib/config.js, so that can be used by import the same in other files when needed.
     fetch(`${rickMortyBaseURL}/location/${int}`, data)
       .then((res) => {
         status = res.status;

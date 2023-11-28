@@ -12,39 +12,40 @@ import { getRickMortyCharacters } from './services/rickAndMorty';
 import Header from './components/header';
 
 function App() {
-  const [ characters, setCharacters ] = useState([]);
-  const [ pageInfo, setPageInfo ] = useState(1);
-  const [ random, setRandom ] = useState(1);
-  const [ usrSearch, setUsrSearch ] = useState("");
+  const [ characters, setCharacters ] = useState([]);//contains all the charachters data
+  const [ pageInfo, setPageInfo ] = useState(1);//contains info of till what page is data is loaded for infinite scrolling
+  const [ random, setRandom ] = useState(1);// using a random flag state to call charachter api as function passed to addeventlistner will not have updated state in it
+  const [ usrSearch, setUsrSearch ] = useState("");//state used for user entered search string in input
 
-  const containerRef = useRef();
-  const navigate = useNavigate();
+  const containerRef = useRef();// ref for element on which scroll event will run
+  const navigate = useNavigate();// using useNavigate provided by react-router-dom to navigate through pages
 
   useEffect(() => {
-    handleLoadData("", pageInfo);
+    handleLoadData("", pageInfo);//getting all the charachters on mount of page
     
-    containerRef.current.addEventListener('scroll', handleScroll);
+    containerRef.current.addEventListener('scroll', handleScroll);//attaching scroll event listner to desired container ref for infinite scroll api call.
   }, []);
 
   useEffect(() => {
     if (pageInfo === 1) return;
-    handleLoadData(usrSearch, pageInfo); 
+    handleLoadData(usrSearch, pageInfo); //calling api when page is scrolled to bottom by updating random states updation 
   }, [random]);
   
-
+  //scroll event listner func
   const handleScroll = () => {
     const container = containerRef.current;
     if (container) {
       const scrollHeight = container.scrollHeight;
       const scrollTop = container.scrollTop;
       const clientHeight = container.clientHeight;
-      
-      console.log(scrollTop , clientHeight , scrollHeight - 5, "called");
-      if (scrollTop + clientHeight >= scrollHeight - 5) {
+
+      if (scrollTop + clientHeight >= scrollHeight - 5) {//checking if the page is scrolled to bottom.
         setRandom(Math.random());// updating a flag state with random number to make API call on state Update
       }
     }
   };
+
+  //loading data with proper error handeling;
   const handleLoadData = async (search, page) => {
     await getRickMortyCharacters(search, page).then(resp => {
 
@@ -74,6 +75,7 @@ function App() {
     });
   };
 
+  //user search state updation and api call
   const handleSearch = async (e) => {
     setUsrSearch(e.target.value);
 
@@ -81,6 +83,7 @@ function App() {
     handleLoadData(e.target.value, 1);
   };
 
+  // search clear using cross icon single click
   const handleSearchClear = () => {
     setUsrSearch("");
     
@@ -88,14 +91,15 @@ function App() {
     handleLoadData("", 1);
   }
 
+  //route updation on card click
   const handleRoute = data => () => {
-    navigate('/profile', { state: {profileData: data} });
+    navigate('/profile', { state: {profileData: data} });//sending profiledata of the charachter in route only
   };
 
   return (
     <div className="App">
       {/* Header section */}
-      <Header 
+      <Header
         handleSearch={handleSearch} 
         usrSearch={usrSearch} 
         handleSearchClear={handleSearchClear} 
@@ -116,4 +120,4 @@ function App() {
   );
 }
 
-export default React.memo(App);
+export default React.memo(App);//using react memo for rerendering if there is any change

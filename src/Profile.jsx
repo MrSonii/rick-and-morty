@@ -6,23 +6,28 @@ import { useLocation } from 'react-router-dom';
 
 //components-imports
 import Header from './components/header';
+
+//api calls
 import { getRickMortyCharacterEpisodes, getRickMortyCharacterLocation } from './services/rickAndMorty';
 
 function Profile() {
-  const [ profile, setProfile ] = useState({});
-  const [ episodeList, setEpisodeList ] = useState([]);
-  const [ locationData, setLocationData ] = useState({});
+  const [ profile, setProfile ] = useState({});//state to store profile data
+  const [ episodeList, setEpisodeList ] = useState([]);//state to store episodes list.
+  const [ locationData, setLocationData ] = useState({});//state to store location data
 
-  const { state: { profileData } } = useLocation();
+  const { state: { profileData } } = useLocation();//destructuring data sent in navigation, accessing through useLocation on rect-router-dom
 
+  //on mount functionality
   useEffect(() => {
-    setProfile(profileData);
-    profileData?.episode?.length && getEpisodeData();
-    profileData?.episode?.length && getLocationData();
+    setProfile(profileData);//saving profile data in a profile state
+    profileData?.episode?.length && getEpisodeData();//getting episode data from api call if charchter has episode data in it
+    profileData?.location?.url?.length && getLocationData();//getting location data from api call if charchter has location data in it
   }, []);
 
   const getEpisodeData = async () => {
-    const payloadList = profileData.episode.map(data => data?.split("/")[data.split("/").length - 1])
+    const payloadList = profileData.episode.map(data => data?.split("/")[data.split("/").length - 1]);//getting list of all the episode numbers and storing in a array for api call
+
+    //getting episode data with proper error handelling
     await getRickMortyCharacterEpisodes(payloadList).then(res => {
       if (res.status === 200) {
         console.log(res)
@@ -37,8 +42,10 @@ function Profile() {
   };
 
   const getLocationData = async () => {
+    //getting location data from profile data for location api call
     const int = profileData?.location?.url?.split('/')?.[profileData?.location?.url?.split('/').length - 1];
 
+    //getting lcoation data with proper error handelling
     await getRickMortyCharacterLocation(int).then(res => {
       if (res.status === 200) {
         setLocationData(res.data);
@@ -53,7 +60,10 @@ function Profile() {
   
   return (
     <div className='App'>
+      {/* header component without search and sorting for profile page as not needed there */}
       <Header />
+
+      {/* body */}
       <div className='card-cont'>
         <div className='profile-cont'>
           <div className='image-cont'>
@@ -149,4 +159,4 @@ function Profile() {
   )
 }
 
-export default React.memo(Profile);
+export default React.memo(Profile);//using react memo for rerendering if there is any change

@@ -11,18 +11,18 @@ function Header(props) {
 
   const { handleSearchClear, usrSearch, handleSearch, homepage, setCharacters, pageInfo, setPageInfo} = props;
 
-  const statusOption = ["Alive", "Dead", "Unknown"];
-  const genderOption = ['Female', 'Male', 'Genderless', 'Unknown'];
+  const statusOption = ["Alive", "Dead", "Unknown"];//values of status filter to be shown in dropdown
+  const genderOption = ['Female', 'Male', 'Genderless', 'Unknown'];//values of gender filter to be shown in dropdown
 
-  const handleFilterType = (e) => {
+  const handleFilterType = (e) => {//saving filter type and clearing previously selected option for the filter
     setFilterBy(e.target.value);
     setFilterOption('');
   };
 
-  const applyfilter = async (e) => {
+  const applyfilter = async (e) => {//function to be called when value of the selected filter is selected from dropdown
     setFilterOption(e.target.value);
-    console.log(filterBy, "filterBy", filterOption);
-    await getRickMortyCharacters(usrSearch, 1, filterBy, e.target.value).then(resp => {
+    
+    await getRickMortyCharacters(usrSearch, 1, filterBy, e.target.value).then(resp => {//get api call with proper error handelling
       if(resp.status === 200) {
           setCharacters([...resp.data.results]);
   
@@ -40,6 +40,7 @@ function Header(props) {
   return (
     <header className="App-header">
       <h1>Rick And Morty</h1>
+
       {homepage && <span>
         <span className='relative' style={{width: "30%"}}>
           <input type="text" placeholder='Filter By Name' className='header-search-input' onChange={handleSearch} value={usrSearch}/>
@@ -62,4 +63,4 @@ function Header(props) {
   )
 }
 
-export default React.memo(Header);
+export default React.memo(Header);//using react memo for rerendering if there is any change
